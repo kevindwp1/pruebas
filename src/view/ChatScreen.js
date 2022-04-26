@@ -38,46 +38,41 @@ function ChatScreen({ chatActivo, usuarioGlobal, idActivo }) {
 
   async function getListaMensajes() {
 
-    const chats = []
+    const idMiChat = []
+    const idUser2 = []
     const docuRefChat = collection(firestore, `users/${usuarioGlobal.uid}/chats`)
     const datoChat = await getDocs(docuRefChat)
     datoChat.forEach(datoCifrado => {
-      chats.push(datoCifrado.data().idChat)
-    })
-    /**
-     * el id activo viene desde el side bar al momento de dar click en el usuario con el que quiero hablar 
-    */
-    const idMensaje = chats[idActivo]
-    const mensajes = []
+      idMiChat.push(datoCifrado.data().idChat)
+      idUser2.push(datoCifrado.data().idUser)
 
+    });
+
+    function findId(id) {
+      return id === idUser2
+      console.log(id)
+    }
+
+    const idChat2 = []
+    const mensajes2 = []
+    const idMensaje = idMiChat[idActivo]
+    const mensajes = []
+    const docuRefChat2 = collection(firestore, `users/${idUser2}/chats`)
+    const datoChat2 = await getDocs(docuRefChat2)
+    datoChat2.forEach(datoCifrado2 => {
+      idChat2.push(datoCifrado2.data().idChat)
+      mensajes2.push(datoCifrado2.data())
+    })
     const docuRefMens = collection(firestore, `/users/${usuarioGlobal.uid}/chats/${idMensaje}/Messages`)
     const datoMen = await getDocs(docuRefMens)
     datoMen.forEach(datoCifrado => {
       mensajes.push(datoCifrado.data())
-
-
-      /*if (datoCifrado.data().type === "send") {
-        console.log('emisor')
-        setTipoMensaje(true)
-
-      } else {
-        console.log('receptor')
-        setTipoMensaje(false)
-        console.log(tipoMensaje)
-      }
-
-   */
     })
-    console.log(idMensaje)
 
+    setListaMensajes([...mensajes])
 
-
-    setListaMensajes([...mensajes]);
-
-    console.log(chats)
 
   }
-
 
   async function enviarMensaje(e) {
     e.preventDefault();
