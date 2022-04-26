@@ -2,7 +2,7 @@ import React from 'react'
 
 function MessageR() {
   return (
-    <div>MessageR</div>
+    <div>soy el archivo MessageR.js</div>
   )
 }
 
